@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="continer mt-4">
+        <div class="text-center">
+            <h2>DETALLES {{ namePkm | uppercase }}</h2>
+        </div>
+        <div class="card">
+            <img [src]="imgPkm" class="card-img-top mt-3" alt="imgPkm" width="100" height="100">
+            <div class="text-center mt-3">
+                <label for="cm">Tamaño {{dataPkm.height}} cm de alto y {{ dataPkm.weight }} cm de largo</label>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title"><strong>Habilidades</strong></h4>
+              <ul class="list-group">
+                @for(hab of dataPkm.abilities; track dataPkm) {
+                    <li class="list-group-item">{{hab.ability.name}}</li>
+                }
+              </ul>
+              <h4 class="card-title mt-3"><strong>Tipos</strong></h4>
+              <ul class="list-group">
+                @for(type of dataPkm.types; track dataPkm) {
+                    <li class="list-group-item">{{type.type.name}}</li>
+                }
+              </ul>
+              <h4 class="card-title mt-3"><strong>Algunos movimientos</strong></h4>
+              <ul class="list-group">
+                @for(mov of dataPkm.moves; track dataPkm) {
+                    @if($index < 10) {
+                        <li class="list-group-item">{{mov.move.name}}</li>
+                    }
+                }
+              </ul>
+              <div class="text-center mt-3 d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary block" routerLink="/listPoke" routerLinkActive="router-link-active" >Regresar</button>
+            </div>
+            </div>
+          </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="container-fluid">
+    <div class="container mt-5">
+        <div class="row">
+            @for(pk of listPk.results; track listPk) {
+                <div class="col-lg-3 col-sm-6 mt-3 puntero" (click)="viewPoke(pk.name)">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">{{pk.name}}</h3>
+                            <img src="../../../assets/pokeBall.jpg" class="card-img" alt="pokeBall">
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="text-center">
+                <mat-paginator #paginator
+                    class="demo-paginator"
+                    (page)="changePag($event)"
+                    [length]="length"
+                    [pageSize]="pageSize"
+                    [disabled]="disabled"
+                    [showFirstLastButtons]="showFirstLastButtons"
+                    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                    [hidePageSize]="hidePageSize"
+                    [pageIndex]="pageIndex"
+                    aria-label="Select page">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

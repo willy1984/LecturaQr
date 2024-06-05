@@ -1,17 +1,18 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { BrowserMultiFormatReader, Result } from '@zxing/library';
-import { MatButton } from '@angular/material/button'
-import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
+import { MatChipsModule } from '@angular/material/chips'
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-read-code',
   standalone: true,
-  imports: [RouterOutlet, MatButton, NavBarComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [
+    MatChipsModule
+  ],
+  templateUrl: './read-code.component.html',
+  styleUrl: './read-code.component.scss'
 })
-export class AppComponent implements OnInit {
+export class ReadCodeComponent {
+
   // result: string | null = null;
   // private codeReader = new BrowserMultiFormatReader();
   @ViewChild('video', { static: true }) videoElement!: ElementRef<HTMLVideoElement>;
@@ -19,27 +20,16 @@ export class AppComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
   codeReader = new BrowserMultiFormatReader();
   result: string | null = null;
+  col6 = 'col-6';
+  col12 = 'col-12';
+  opencamera = false;
+  photo = false;
 
   constructor() {
-    // const hints = new Map();
-    // hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-    //   BarcodeFormat.QR_CODE,
-    //   BarcodeFormat.CODE_128,
-    //   BarcodeFormat.CODE_39,
-    //   BarcodeFormat.EAN_13,
-    //   BarcodeFormat.EAN_8,
-    //   BarcodeFormat.UPC_A,
-    //   BarcodeFormat.UPC_E,
-    //   BarcodeFormat.ITF,
-    //   BarcodeFormat.DATA_MATRIX,
-    //   BarcodeFormat.PDF_417,
-    //   BarcodeFormat.AZTEC
-    // ]);
-    // this.codeReader = new BrowserMultiFormatReader(hints);
   }
 
   ngOnInit(): void {
-    // this.startCamera();  
+    // this.startCamera();    
   }
 
   // onFileSelected(event: Event): void {
@@ -83,6 +73,7 @@ export class AppComponent implements OnInit {
           this.videoElement.nativeElement.srcObject = stream;
           this.videoElement.nativeElement.play();
           this.scan();
+          this.opencamera = true
         })
         .catch(err => console.error(err));
     } else {
@@ -91,6 +82,8 @@ export class AppComponent implements OnInit {
   }
 
   stopCamera(): void {
+    this.opencamera = false
+    this.photo = false;
     const stream = this.videoElement.nativeElement.srcObject as MediaStream;
     if (stream) {
       const tracks = stream.getTracks();
@@ -114,13 +107,16 @@ export class AppComponent implements OnInit {
     this.startCamera();
   }
 
-  capture() {
+  async capture() {
+    this.photo = true;
+    this.result = null;
     const video = this.video.nativeElement;
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
-
-    if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    let algo: any;
+    
+    if (context && this.photo) {
+      algo = context.drawImage(video, 0, 0, canvas.width, canvas.height);
     }
   }
 
@@ -135,4 +131,5 @@ export class AppComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
   }
+
 }

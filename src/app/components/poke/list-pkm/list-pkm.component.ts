@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { MyAppService } from '../../../services/my-app.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Listpkm } from '../../../model/list-pkm';
+import { Listpkm, Result } from '../../../model/list-pkm';
 import {PageEvent, MatPaginatorModule} from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 
@@ -24,6 +24,7 @@ import { CommonModule } from '@angular/common';
 export class ListPkmComponent {
 
   listPk: Listpkm = new Listpkm();
+  prueba: Result[] = [];
   offset = 0;
 
   length = 0;
@@ -54,12 +55,26 @@ export class ListPkmComponent {
   }
 
   getListPkm(off: number, lim: number) {
+    this.prueba = [];
     this.services.buscarPk(off, lim).subscribe({
-      next: (data) => {
-        this.listPk = data;
-        this.length = this.listPk.count;
+      next: (data: Listpkm) => {
+        this.getImage(data);
+        this.length = data.count;
       }
     }); 
+  }
+
+  async getImage(data: Listpkm) {
+    console.log(data);
+    await data.results.forEach(item => {
+      this.services.getImage(item.name).subscribe({
+        next: (data) => {
+          item.img = data.image;
+          this.prueba.push(item);
+          console.log('****', this.prueba);
+        }
+      });
+    });
   }
 
   viewPoke(poke: string): void {

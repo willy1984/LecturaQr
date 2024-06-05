@@ -1,12 +1,12 @@
 <div class="container-fluid">
     <div class="container mt-5">
         <div class="row">
-            @for(pk of listPk.results; track listPk) {
+            @for(pk of prueba; track listPk) {
                 <div class="col-lg-3 col-sm-6 mt-3 puntero" (click)="viewPoke(pk.name)">
                     <div class="card">
                         <div class="card-body text-center">
                             <h3 class="card-title">{{pk.name}}</h3>
-                            <img src="../../../assets/pokeBall.jpg" class="card-img" alt="pokeBall">
+                            <img [src]="pk.img" class="card-img" alt="" width="95%" height="95%">
                         </div>
                     </div>
                 </div>
